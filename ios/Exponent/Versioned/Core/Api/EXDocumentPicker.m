@@ -63,9 +63,9 @@ RCT_EXPORT_METHOD(getDocumentAsync:(NSDictionary *)options resolver:(RCTPromiseR
     _shouldCopyToCacheDirectory = YES;
   }
 
-  UIDocumentMenuViewController *documentMenuVC;
+  UIDocumentPickerViewController *documentMenuVC;
   @try {
-    documentMenuVC = [[UIDocumentMenuViewController alloc] initWithDocumentTypes:@[type]
+    documentMenuVC = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[type]
                                                                           inMode:UIDocumentPickerModeImport];
   }
   @catch (NSException *exception) {
@@ -85,20 +85,6 @@ RCT_EXPORT_METHOD(getDocumentAsync:(NSDictionary *)options resolver:(RCTPromiseR
 
   id<EXUtilitiesInterface> utils = [_bridge.scopedModules.moduleRegistry getModuleImplementingProtocol:@protocol(EXUtilitiesInterface)];
   [utils.currentViewController presentViewController:documentMenuVC animated:YES completion:nil];
-}
-
-- (void)documentMenu:(UIDocumentMenuViewController *)documentMenu didPickDocumentPicker:(UIDocumentPickerViewController *)documentPicker
-{
-  documentPicker.delegate = self;
-  id<EXUtilitiesInterface> utils = [_bridge.scopedModules.moduleRegistry getModuleImplementingProtocol:@protocol(EXUtilitiesInterface)];
-  [utils.currentViewController presentViewController:documentPicker animated:YES completion:nil];
-}
-
-- (void)documentMenuWasCancelled:(UIDocumentMenuViewController *)documentMenu
-{
-  _resolve(@{@"type": @"cancel"});
-  _resolve = nil;
-  _reject = nil;
 }
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentAtURL:(NSURL *)url
