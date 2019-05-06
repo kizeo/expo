@@ -74,9 +74,9 @@ UM_EXPORT_METHOD_AS(getDocumentAsync,
   
   _shouldCopyToCacheDirectory = options[@"copyToCacheDirectory"] && [options[@"copyToCacheDirectory"] boolValue] == NO ? NO : YES;
   
-  UIDocumentMenuViewController *documentMenuVC;
+  UIDocumentPickerViewController *documentMenuVC;
   @try {
-    documentMenuVC = [[UIDocumentMenuViewController alloc] initWithDocumentTypes:@[type]
+    documentMenuVC = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[type]
                                                                           inMode:UIDocumentPickerModeImport];
   }
   @catch (NSException *exception) {
@@ -95,19 +95,6 @@ UM_EXPORT_METHOD_AS(getDocumentAsync,
   }
   
   [_utilities.currentViewController presentViewController:documentMenuVC animated:YES completion:nil];
-}
-
-- (void)documentMenu:(UIDocumentMenuViewController *)documentMenu didPickDocumentPicker:(UIDocumentPickerViewController *)documentPicker
-{
-  documentPicker.delegate = self;
-  [_utilities.currentViewController presentViewController:documentPicker animated:YES completion:nil];
-}
-
-- (void)documentMenuWasCancelled:(UIDocumentMenuViewController *)documentMenu
-{
-  _resolve(@{@"type": @"cancel"});
-  _resolve = nil;
-  _reject = nil;
 }
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentAtURL:(NSURL *)url
